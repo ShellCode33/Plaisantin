@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="buttonPlay">Jouer</string>
+    <string name="buttonAbout">A Propos</string>
+    <string name="size_label_choose">Choisissez la taille de la grille :</string>
+    <string name="random">Aléatoire</string>
+    <string name="browse">Choisir...</string>
+    <string name="info_toast1">Cliquez sur l\'image pour retourner aux images par défaut</string>
+    <string name="resolve_button">Résoudre</string>
+    <string name="wrong_move">Déplacement impossible</string>
+</resources>

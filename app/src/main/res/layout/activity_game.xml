@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0099cc"
+    android:id="@+id/main_layout"
+    android:gravity="top|center">
+
+    <!-- Obligé de définir une taille fixe sinon bug GridView sur certains téléphones (dont le miens :( ) -->
+    <GridView android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/gameView"
+        android:horizontalSpacing="5dp"
+        android:numColumns="3" >
+
+    </GridView>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/resolveButton"
+        android:text="@string/resolve_button"/>
+
+</LinearLayout>

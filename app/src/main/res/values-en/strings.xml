@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="buttonPlay">Play</string>
+    <string name="buttonAbout">About</string>
+    <string name="size_label_choose">Choose grid size :</string>
+    <string name="random">Random</string>
+    <string name="browse">Browse...</string>
+    <string name="info_toast1">Click on the picture to go back to default pictures !</string>
+    <string name="resolve_button">Resolve</string>
+    <string name="wrong_move">Impossible move</string>
+</resources>
