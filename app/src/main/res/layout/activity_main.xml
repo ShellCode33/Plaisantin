@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
+    android:background="@color/colorPrimaryDark"
     tools:context="fr.iut.taquin.MainActivity">
 
     <LinearLayout
@@ -15,17 +15,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
-            android:textColor="#33b5e5"
+            android:textColor="@color/colorAccent"
             android:textSize="50sp"
             android:textStyle="bold"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:layout_gravity="top|center"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/size_label_choose"/>
 
         <RadioGroup android:id="@+id/toggleGroup"
             android:layout_width="wrap_content"
@@ -77,12 +72,33 @@
                 />
         </RadioGroup>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewPageDefaultImages"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_arrow_left"
+                android:id="@+id/leftArrow"/>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewPageDefaultImages"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_arrow_right"
+                android:id="@+id/rightArrow"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -116,12 +132,28 @@
                 android:layout_height="wrap_content"
                 android:text="@string/buttonPlay"
                 android:id="@+id/buttonPlay"/>
-
-            <Button
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/buttonAbout"
-                android:id="@+id/buttonAbout"/>
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/buttonScores"
+                    android:id="@+id/buttonBestScores"/>
+
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/buttonAbout"
+                    android:id="@+id/buttonAbout"/>
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

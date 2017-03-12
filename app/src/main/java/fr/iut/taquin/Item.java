@@ -1,6 +1,7 @@
 package fr.iut.taquin;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 
 /**
  * Created by shellcode on 3/7/17.
@@ -17,9 +18,6 @@ public class Item {
     }
 
     public int getId() {
-        if(image == null)
-            return -1;
-
         return id;
     }
 
@@ -29,6 +27,10 @@ public class Item {
 
     public void setImage(Bitmap image) {
         this.image = image;
+    }
+
+    public void setAsHoleInGrid() {
+        id = -1;
     }
 
     public static void resetIds() {

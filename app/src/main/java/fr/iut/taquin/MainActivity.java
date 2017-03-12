@@ -31,8 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private ImagePagerAdapter adapterViewDefault;
     private ViewPager imagesViewPager;
     private ImageView randomImageView, customImageView;
-
-    private ImageView selectedImageView;
+    private ImageView leftArrow, rightArrow;
 
     ToggleButton [] sizeButtons = new ToggleButton[5];
     int gridSize = 3;
@@ -67,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
         imagesViewPager = (ViewPager) findViewById(R.id.viewPageDefaultImages);
         adapterViewDefault = new ImagePagerAdapter(this, new int[] {R.drawable.image1, R.drawable.image2, R.drawable.image3, R.drawable.image4, R.drawable.image5, R.drawable.image6});
         imagesViewPager.setAdapter(adapterViewDefault);
+        imagesViewPager.setOffscreenPageLimit(3);
+        leftArrow = (ImageView) findViewById(R.id.leftArrow);
+        rightArrow = (ImageView) findViewById(R.id.rightArrow);
 
         final Button randomButton = (Button) findViewById(R.id.randomButton);
         Button browseButton = (Button) findViewById(R.id.browseButton);
@@ -75,13 +77,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 randomImageView = new ImageView(getApplicationContext());
-                selectedImageView = randomImageView;
 
                 randomImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         imagesViewPager.setAdapter(adapterViewDefault);
                         randomImageView = null;
+                        showArrows();
                     }
                 });
 
@@ -93,13 +95,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 customImageView = new ImageView(getApplicationContext());
-                selectedImageView = customImageView;
 
                 customImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         imagesViewPager.setAdapter(adapterViewDefault);
                         customImageView = null;
+                        showArrows();
                     }
                 });
 
@@ -108,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Button buttonPlay = (Button) findViewById(R.id.buttonPlay);
+        Button buttonBestScores = (Button) findViewById(R.id.buttonBestScores);
         Button buttonAbout = (Button) findViewById(R.id.buttonAbout);
 
         buttonPlay.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
             Intent gameIntent = new Intent(getApplicationContext(), GameActivity.class);
 
-            ImageView imageToPass = ((ImagePagerAdapter)imagesViewPager.getAdapter()).getCurrentImage();
+            ImageView imageToPass = (ImageView) imagesViewPager.findViewWithTag("default_image_view_" + imagesViewPager.getCurrentItem());
             imageToPass.buildDrawingCache();
             Bitmap bitmap = imageToPass.getDrawingCache();
             GameCore.setGameImage(bitmap); //Bypass Bundle size limitations
@@ -126,34 +129,52 @@ public class MainActivity extends AppCompatActivity {
             startActivity(gameIntent);
             }
         });
+
+        buttonBestScores.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent bestScoresIntent = new Intent(getApplicationContext(), BestScoreActivity.class);
+
+                startActivity(bestScoresIntent);
+            }
+        });
+
+        buttonAbout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent aboutIntent = new Intent(getApplicationContext(), AboutActivity.class);
+
+                startActivity(aboutIntent);
+            }
+        });
     }
 
     @Override
-    protected void onResume() {
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) enableFullScreen();
+    }
+
+    @Override
+    public void onResume() {
         super.onResume();
         enableFullScreen();
     }
 
     private void enableFullScreen() {
 
-        ActionBar actionBar = getSupportActionBar();
-
-        if(actionBar != null)
-            actionBar.hide();
-
-        mainLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        mainLayout.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
     private void switchAdapterToRandom() {
-        DownloadImageTask task = new DownloadImageTask(randomImageView);
+        DownloadImageTask task = new DownloadImageTask(imagesViewPager, randomImageView);
         task.execute("http://lorempixel.com/500/500/");
-        imagesViewPager.setAdapter(new ImagePagerAdapter(getApplicationContext(), new ImageView[] {randomImageView}));
-        Toast.makeText(getApplicationContext(), R.string.info_toast1, Toast.LENGTH_SHORT).show();
     }
 
     private void switchAdapterToCustom() {
@@ -233,8 +254,19 @@ public class MainActivity extends AppCompatActivity {
                     customImageView.setImageBitmap(bitmap);
                     imagesViewPager.setAdapter(new ImagePagerAdapter(this, new ImageView[] {customImageView}));
                     Toast.makeText(getApplicationContext(), R.string.info_toast1, Toast.LENGTH_SHORT).show();
+                    hideArrows();
                 }
                 break;
         }
+    }
+
+    public void showArrows() {
+        leftArrow.setVisibility(View.VISIBLE);
+        rightArrow.setVisibility(View.VISIBLE);
+    }
+
+    public void hideArrows() {
+        leftArrow.setVisibility(View.INVISIBLE);
+        rightArrow.setVisibility(View.INVISIBLE);
     }
 }

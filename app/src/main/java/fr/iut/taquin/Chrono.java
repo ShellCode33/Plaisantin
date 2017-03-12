@@ -1,15 +1,9 @@
 package fr.iut.taquin;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.util.TypedValue;
 import android.widget.TextView;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by shellcode on 3/7/17.
@@ -18,6 +12,7 @@ import java.util.Date;
 public class Chrono extends TextView {
 
     private long begin;
+    private long end;
     private boolean running = false;
     private Activity activity;
 
@@ -40,7 +35,7 @@ public class Chrono extends TextView {
     }
 
     public long getDuration() {
-        return System.currentTimeMillis() - begin;
+        return end - begin;
     }
 
     private void loop() {
@@ -48,9 +43,10 @@ public class Chrono extends TextView {
             @Override
             public void run() {
                 while(running) {
-                    long elaspedTime = System.currentTimeMillis() - begin;
+                    end = System.currentTimeMillis();
+                    long elaspedTime = end - begin;
 
-                    long milliseconds = elaspedTime % 60;
+                    long milliseconds = elaspedTime % 100;
                     long seconds = elaspedTime / 1000 % 60;
                     long minutes = elaspedTime / (60 * 1000) % 60;
 

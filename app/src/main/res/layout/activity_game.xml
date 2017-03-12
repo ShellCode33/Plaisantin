@@ -2,24 +2,58 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
+    android:background="@color/colorPrimaryDark"
     android:id="@+id/main_layout"
     android:gravity="top|center">
 
+
     <!-- Obligé de définir une taille fixe sinon bug GridView sur certains téléphones (dont le miens :( ) -->
+    <!-- spacing volontairement en px sinon il n'y a pas le meme espacement entre les éléments -->
     <GridView android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:id="@+id/gameView"
         android:horizontalSpacing="5dp"
-        android:numColumns="3" >
+        android:background="@color/colorAccent"
+        android:drawSelectorOnTop="true"
+        android:padding="10px"> <!-- volontairement en px sinon il n'y a pas le meme padding sur les coté et en haut/bas -->
 
     </GridView>
 
 
-    <Button
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/resolveButton"
-        android:text="@string/resolve_button"/>
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/hintButton"
+            android:text="@string/hint_button"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/shuffleButton"
+            android:text="@string/shuffle_button"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="bottom">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/giveUpButton"
+            android:id="@+id/giveUpButton"/>
+
+
+    </LinearLayout>
+
 
 </LinearLayout>

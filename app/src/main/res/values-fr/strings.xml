@@ -6,6 +6,22 @@
     <string name="random">Aléatoire</string>
     <string name="browse">Choisir...</string>
     <string name="info_toast1">Cliquez sur l\'image pour retourner aux images par défaut</string>
-    <string name="resolve_button">Résoudre</string>
     <string name="wrong_move">Déplacement impossible</string>
+    <string name="hint_button">Indice</string>
+    <string name="win_toast">Félicitations vous avez gagné en %i coups !</string>
+    <string name="shuffle_button">Mélanger</string>
+    <string name="giveUpButton">Abandonner</string>
+    <string name="save">Ok</string>
+    <string name="buttonScores">Meilleurs Scores</string>
+    <string name="pseudo"></string>
+    <string name="about_text">"Développé par\nClément Fleury\n\nIUT Informatique de\nBordeaux"</string>
+    <string name="category">Catégorie</string>
+    <string name="empty">Vide</string>
+    <string name="moves">coups</string>
+    <string name="in">en</string>
+    <string name="score_dialog_title">SAUVEGARDER</string>
+    <string name="cancel">Annuler</string>
+    <string name="go_back">Retour</string>
+    <string name="loading">Chargement...</string>
+    <string name="download_error">Impossible de télécharger l\'image, vérifiez votre connexion internet !</string>
 </resources>

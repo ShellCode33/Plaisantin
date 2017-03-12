@@ -11,6 +11,22 @@
     <string name="random">Random</string>
     <string name="browse">Browse...</string>
     <string name="info_toast1">Click on the picture to go back to default pictures !</string>
-    <string name="resolve_button">Resolve</string>
     <string name="wrong_move">Impossible move</string>
+    <string name="hint_button">Hint</string>
+    <string name="win_toast">Congrats you won in %i moves !</string>
+    <string name="shuffle_button">Shuffle</string>
+    <string name="giveUpButton">Give Up</string>
+    <string name="save">Save</string>
+    <string name="buttonScores">Best Scores</string>
+    <string name="pseudo">Pseudo...</string>
+    <string name="about_text">"Developed by\nClément Fleury\n\nIUT Informatique of\nBordeaux"</string>
+    <string name="category">Category</string>
+    <string name="empty">Empty</string>
+    <string name="moves">moves</string>
+    <string name="in">in</string>
+    <string name="score_dialog_title">SAVE SCORE</string>
+    <string name="cancel">Cancel</string>
+    <string name="go_back">Go Back</string>
+    <string name="loading">Loading...</string>
+    <string name="download_error">Can\'t download the image, check your internet connection !</string>
 </resources>

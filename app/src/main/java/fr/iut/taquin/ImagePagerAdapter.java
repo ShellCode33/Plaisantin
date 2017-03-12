@@ -51,9 +51,11 @@ public class ImagePagerAdapter extends PagerAdapter {
 
         else {
             image = new ImageView(mContext);
-            image.setScaleType(ImageView.ScaleType.CENTER_CROP);
             image.setImageResource(image_res[i]);
         }
+
+        image.setTag("default_image_view_" + i);
+        image.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         container.addView(image, 0);
         return image;
@@ -62,15 +64,5 @@ public class ImagePagerAdapter extends PagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int i, Object obj) {
         container.removeView((ImageView) obj);
-    }
-
-    @Override
-    public void finishUpdate(ViewGroup container) {
-        super.finishUpdate(container);
-        currentImage = (ImageView)container.getChildAt(0);
-    }
-
-    public ImageView getCurrentImage() {
-        return currentImage;
     }
 }

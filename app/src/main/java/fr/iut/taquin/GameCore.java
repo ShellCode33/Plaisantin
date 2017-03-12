@@ -1,6 +1,7 @@
 package fr.iut.taquin;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.util.Log;
 
 import java.util.Arrays;
@@ -19,6 +20,7 @@ public class GameCore {
     //Case vide = -1
     private int [][] item_ids_win_matrix; //Position des items pour que le jeu soit terminé (et donc gagné)
     private int [][] item_ids_current; //Position des items actuelle
+    private int movesCount = 0;
 
     public GameCore(int grid_size) {
 
@@ -35,15 +37,10 @@ public class GameCore {
 
         for(int item_index = 0, i = 0; i < grid_size; i++) {
             for(int j = 0; j < grid_size; j++, item_index++) {
-                if(item_index < grid_size*grid_size-1) {
-                    item_ids_win_matrix[i][j] = items[item_index].getId();
-                    item_ids_current[i][j] = items[item_index].getId();
-                }
+                item_ids_win_matrix[i][j] = items[item_index].getId();
+                item_ids_current[i][j] = items[item_index].getId();
             }
         }
-
-        item_ids_win_matrix[grid_size-1][grid_size-1] = -1;
-        item_ids_current[grid_size-1][grid_size-1] = -1;
 
         Log.d("GAMECORE", "Initial state : " + Arrays.deepToString(item_ids_current));
         shuffle();
@@ -53,21 +50,31 @@ public class GameCore {
         originalBitmap = image;
     }
 
+    public static Bitmap getGameImage() {
+        return originalBitmap;
+    }
+
     private void splitImageIntoItems() {
 
         int sub_image_size = originalBitmap.getWidth() / grid_size;
         int item_index = 0;
 
         for(int i = 0; i < grid_size; i++) {
-            for(int j = 0; j < grid_size; j++) {
-                if(j != grid_size-1 || i != grid_size-1) { //We delete bottom-right image by checking that
-                    Bitmap subImage = Bitmap.createBitmap(originalBitmap, j * sub_image_size, i * sub_image_size, sub_image_size, sub_image_size);
-                    items[item_index++] = new Item(subImage);
+            for(int j = 0; j < grid_size; j++, item_index++) {
+                Bitmap subImage = Bitmap.createBitmap(originalBitmap, j * sub_image_size, i * sub_image_size, sub_image_size, sub_image_size);
+
+                items[item_index] = new Item(subImage);
+
+                if(j == grid_size-1 && i == grid_size-1) {
+                    subImage.eraseColor(Color.TRANSPARENT); //On met l'image transparente
+                    items[item_index].setAsHoleInGrid();
                 }
             }
         }
+    }
 
-        items[item_index] = new Item(null); //Item avec image vide
+    public int getSubImageSize() {
+        return originalBitmap.getWidth() / grid_size;
     }
 
     public int getGridSize() {
@@ -75,6 +82,9 @@ public class GameCore {
     }
 
     public Item[] getItems() {
+        for(int i = 0; i < items.length; i++)
+            if(items[i] == null)
+                Log.d("GAMECORE", "Item already null here...");
         return items;
     }
 
@@ -85,73 +95,62 @@ public class GameCore {
             return false;
 
         //cordonnées de l'item cliqué
-        int i_to_play = 0, j_to_play = 0;
+        int i_clicked = -1, j_clicked = -1, i_empty_cell = -1, j_empty_cell = -1;
 
-        for(int i = 0; i < item_ids_current.length && i_to_play == 0; i++) {
+        for(int i = 0; i < item_ids_current.length && (i_clicked == -1 || i_empty_cell == -1); i++) {
             for(int j = 0; j < item_ids_current[i].length; j++) {
                 if(item_ids_current[i][j] == id) {
-                    i_to_play = i;
-                    j_to_play = j;
-                    break;
+                    i_clicked = i;
+                    j_clicked = j;
+                    //break;
+                }
+
+                else if(item_ids_current[i][j] == -1) {
+                    i_empty_cell = i;
+                    j_empty_cell = j;
                 }
             }
         }
 
-        boolean moveOnLine = false;
-
-        //check line
-        int j;
-        for(j = 0; j < item_ids_current.length; j++) {
-            if(item_ids_current[i_to_play][j] == -1) {
-                moveOnLine = true;
-                break;
-            }
-        }
-
-        boolean moveOnColumn = false;
-        int i = 0;
-
-        if(!moveOnLine) {
-            //check column
-            for (; i < item_ids_current.length; i++) {
-                if (item_ids_current[i][j_to_play] == -1) {
-                    moveOnColumn = true;
-                    break;
-                }
-            }
-        }
+        boolean moveOnLine = i_clicked == i_empty_cell;
+        boolean moveOnColumn = j_clicked == j_empty_cell;
 
         if(moveOnLine) {
-            if(j_to_play - j > 0) {
+            Log.d("GAMECORE", "can move on line");
+            if(j_clicked - j_empty_cell > 0) {
 
-                for(int index = j; index < j_to_play; index++) {
-                    item_ids_current[i_to_play][index] = item_ids_current[i_to_play][index+1];
+                for(int index = j_empty_cell; index < j_clicked; index++) {
+                    item_ids_current[i_clicked][index] = item_ids_current[i_clicked][index+1];
                 }
             }
 
             else {
-                for(int index = j; index > j_to_play; index--) {
-                    item_ids_current[i_to_play][index] = item_ids_current[i_to_play][index-1];
+                for(int index = j_empty_cell; index > j_clicked; index--) {
+                    item_ids_current[i_clicked][index] = item_ids_current[i_clicked][index-1];
                 }
             }
         }
 
         else if(moveOnColumn) {
-            if(i_to_play - i > 0) {
+            Log.d("GAMECORE", "can move on column");
+            if(i_clicked - i_empty_cell > 0) {
 
-                for(int index = i; index < i_to_play; index++) {
-                    item_ids_current[index][j_to_play] = item_ids_current[index+1][j_to_play];
+                for(int index = i_empty_cell; index < i_clicked; index++) {
+                    item_ids_current[index][j_clicked] = item_ids_current[index+1][j_clicked];
                 }
             }
 
             else {
-                for(int index = i; index > i_to_play; index--) {
-                    item_ids_current[index][j_to_play] = item_ids_current[index-1][j_to_play];
+                for(int index = i_empty_cell; index > i_clicked; index--) {
+                    item_ids_current[index][j_clicked] = item_ids_current[index-1][j_clicked];
                 }
             }
         }
 
-        item_ids_current[i_to_play][j_to_play] = -1;
+        if(moveOnLine || moveOnColumn) {
+            item_ids_current[i_clicked][j_clicked] = -1;
+            movesCount++;
+        }
 
         return moveOnLine || moveOnColumn;
     }
@@ -161,7 +160,11 @@ public class GameCore {
         return item_ids_current;
     }
 
-    private void shuffle() {
+    public int[][] getWinMatrix() {
+        return item_ids_win_matrix;
+    }
+
+    public void shuffle() {
 
         Random random = new Random();
 
@@ -224,5 +227,9 @@ public class GameCore {
                     equal = false;
 
         return equal;
+    }
+
+    public int getMovesCount() {
+        return movesCount;
     }
 }
